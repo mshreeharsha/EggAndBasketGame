@@ -46,7 +46,7 @@ def basketmovement(keys,basket):
     if keys[pygame.K_LEFT] and basket.x >0:
         basket.x -= VEL
 
-def redrawwindow(basket,NUMBER,score,lives):
+def redrawwindow(basket,NUMBER,score,lives,level):
     WIN.blit(SCENARY,(0,0))
     WIN.blit(BASKET,(basket.x,basket.y))
 
@@ -54,7 +54,9 @@ def redrawwindow(basket,NUMBER,score,lives):
         WIN.blit(EGG,(egg.x,egg.y))
     SCORE_TEXT=SCORELIVES.render(f"Score : {score}",1, RED)
     LIVES_TEXT=SCORELIVES.render(f"Lives : {lives}",1, RED)
+    LEVEL_TEXT=SCORELIVES.render(f"Level : {level}",1, RED)
     WIN.blit(SCORE_TEXT,(10,SCORE_TEXT.get_height()+10))
+    WIN.blit(LEVEL_TEXT,(WIDTH/2 - LEVEL_TEXT.get_width()/2,LEVEL_TEXT.get_height()+10))
     WIN.blit(LIVES_TEXT,(WIDTH- 10-LIVES_TEXT.get_width(),SCORE_TEXT.get_height()+10))
     pygame.display.update()
 
@@ -64,6 +66,7 @@ def main():
     NUMBER=[]
     lives=3
     score=0
+    level=1
 
     running =True
     clock=pygame.time.Clock()
@@ -80,7 +83,7 @@ def main():
                 lives-=1
         
         clock.tick(FPS)
-        if len(NUMBER)<1:
+        if len(NUMBER)<level:
             x_coor=random.randint(10, WIDTH-EWIDTH-10)
             egg = pygame.Rect(x_coor, 50,EWIDTH,EHEIGHT)
             NUMBER.append(egg)
@@ -89,8 +92,12 @@ def main():
         keys=pygame.key.get_pressed()
         basketmovement(keys, basket)
         egg_handle(NUMBER,egg,basket)
-        redrawwindow(basket,NUMBER,score,lives)
+        redrawwindow(basket,NUMBER,score,lives,level)
         
+        if score > level*10:
+            level+=1
+            lives+=2
+
         if lives <=0:
             drawgameendtext(f"You LOST !! Your SCORE : {score}",score)
             break
