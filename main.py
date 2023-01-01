@@ -94,9 +94,9 @@ def main():
         egg_handle(NUMBER,egg,basket)
         redrawwindow(basket,NUMBER,score,lives,level)
         
-        if score > level*10:
+        if score > level*(15):
             level+=1
-            lives+=2
+            lives+=3
 
         if lives <=0:
             drawgameendtext(f"You LOST !! Your SCORE : {score}",score)
